@@ -7,11 +7,15 @@ from tkinter.filedialog import askopenfilename
 from materialyoucolor.utils.color_utils import rgba_from_argb
 from materialyoucolor.quantize import QuantizeCelebi, StbLoadImage
 from materialyoucolor.score.score import Score
+from materialyoucolor.scheme.scheme import Scheme
 from PIL import Image, ImageTk
+
+rgba_to_hex = lambda rgba: "#{:02X}{:02X}{:02X}{:02X}".format(*map(round, rgba))
 
 
 if __name__ == "__main__":
     root = Tk()
+    root.geometry("400x400")
     #root.configure(background="#ffffff")
 
     button_quit = Button(root, text='Exit Program', command=root.quit, borderwidth=0)
@@ -51,6 +55,25 @@ if __name__ == "__main__":
             maincolors.append(Label(frame, background=bgcolorlabel, width=10))
             maincolors[i].pack(padx=1, pady=1)
         frame.pack(padx=0, pady=0)
+        
+
+        test = Scheme.light(selected[0])
+        schemecolors = []
+        cnt = 0
+        schemelabel = Label(frame, background="white", text="Scheme.light", width=10)
+        schemelabel.pack(padx=1, pady=1)
+        for key in test.props.keys():
+            color = selected[i]
+            #bgcolorlabel = "#" + hex(color)[4::]
+            schemecolors.append(Label(frame, background=rgba_to_hex(test.props[key])[:-2], width=10))
+            schemecolors[cnt].pack(padx=1, pady=1)
+            cnt += 1
+            myButton.configure(background=rgba_to_hex(test.props["primaryContainer"])[:-2])
+            button_quit.configure(background=rgba_to_hex(test.props["error"])[:-2])
+            print(rgba_to_hex(test.props[key]))
+       
+
+        #print(test.props.keys())
 
         #print(pixel_len)
         #print(image_data)
