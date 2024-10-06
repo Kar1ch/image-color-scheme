@@ -18,6 +18,16 @@ from PIL import Image, ImageTk
 
 rgba_to_hex = lambda rgba: "#{:02X}{:02X}{:02X}{:02X}".format(*map(round, rgba))
 
+def combine_hex_values(d):
+  d_items = sorted(d.items())
+  tot_weight = sum(d.values())
+  red = int(sum([int(k[:2], 16)*v for k, v in d_items])/tot_weight)
+  green = int(sum([int(k[2:4], 16)*v for k, v in d_items])/tot_weight)
+  blue = int(sum([int(k[4:6], 16)*v for k, v in d_items])/tot_weight)
+  zpad = lambda x: x if len(x)==2 else '0' + x
+  return zpad(hex(red)[2:]) + zpad(hex(green)[2:]) + zpad(hex(blue)[2:])
+
+
 
 
 class MainWindow(QMainWindow):
@@ -59,9 +69,25 @@ class MainWindow(QMainWindow):
         print(selected)
         
 
-
-        bgcolor = "#" + hex(selected[0])[4::]
+        selected_in_hex = [hex(color)[4::] for color in selected]
         
+        totaloccurance = 0
+        for i in range(len(selected)):
+            totaloccurance += colors[selected[i]]
+            print(colors[selected[i]])
+
+        colors_and_occurance = {}
+        for i in range(len(selected)):
+            colors_and_occurance[selected_in_hex[i]] = (colors[selected[i]] ) / totaloccurance
+            #print((colors[selected[i]] * 100) / totaloccurance)
+
+        print(colors_and_occurance)
+
+
+        #bgcolor = "#" + hex(selected[0])[4::]
+        #print(colors[selected[0]])
+        bgcolor = "#" + combine_hex_values(colors_and_occurance)
+
         self.setStyleSheet("background-color: "+ bgcolor + ";") 
 
         
@@ -110,7 +136,7 @@ class MainWindow(QMainWindow):
         
         #layout = QVBoxLayout()
         button = QPushButton("Выбрать картинку")
-        color = selected[1]
+        color = selected[0]
         bgcolorbutton = "#" + hex(color)[4::]
 
         button.setStyleSheet("background-color: " + bgcolorbutton + "; border-radius: 8px;" )
