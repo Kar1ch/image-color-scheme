@@ -113,8 +113,8 @@ class MainWindow(QMainWindow):
         color = selected[1]
         bgcolorbutton = "#" + hex(color)[4::]
 
-        button.setStyleSheet("background-color: " + bgcolorbutton + "; border-radius: 10px;" )
-        button.setFixedSize(QSize(150, 60))
+        button.setStyleSheet("background-color: " + bgcolorbutton + "; border-radius: 8px;" )
+        button.setFixedSize(QSize(160, 50))
         button.clicked.connect(self.openFileDialog)
         layout.addWidget(button)
 
