@@ -130,7 +130,7 @@ class MainWindow(QMainWindow):
         lb = QLabel(self)
         pixmap = QPixmap(fname_E)
         height_label = 100
-        lb.resize(int(image.width/2), int(image.height/2))
+        lb.resize(300, int((image.height * 300) / image.width))
         lb.setPixmap(pixmap.scaled(lb.size()))
 
         
