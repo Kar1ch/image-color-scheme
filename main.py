@@ -65,7 +65,9 @@ class MainWindow(QMainWindow):
 
         left_pixels = []
         for i in range(1, len(pixel_array), image.width):
-            left_pixels.append(pixel_array[i])
+            for j in range(int(image.width * 0.15)):
+                left_pixels.append(pixel_array[i+j])
+
             #print(i, pixel_array[i])
 
         left_colors = QuantizeCelebi(left_pixels, MAX_COLOR)
