@@ -89,6 +89,7 @@ class MainWindow(QMainWindow):
 
         selected_in_hex = [hex(color)[4::] for color in selected]
         
+        
         totaloccurance = 0
         for i in range(len(selected)):
             totaloccurance += colors[selected[i]]
@@ -100,13 +101,14 @@ class MainWindow(QMainWindow):
             #print((colors[selected[i]] * 100) / totaloccurance)
 
         print(colors_and_occurance)
+        
 
 
         #bgcolor = "#" + hex(selected[0])[4::]
         #print(colors[selected[0]])
-        #bgcolor = "#" + combine_hex_values(colors_and_occurance)
+        bgcolor = "#" + combine_hex_values(colors_and_occurance)
 
-        bgcolor = "#" + combine_hex_values(allcolors_and_occurance)
+        #bgcolor = "#" + combine_hex_values(allcolors_and_occurance)
         self.setStyleSheet("background-color: "+ bgcolor + ";") 
 
         
