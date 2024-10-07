@@ -71,14 +71,15 @@ class MainWindow(QMainWindow):
             #print(i, pixel_array[i])
 
         left_colors = QuantizeCelebi(left_pixels, MAX_COLOR)
-        print(left_colors)
+        #print(left_colors)
         
         colors = QuantizeCelebi(pixel_array, MAX_COLOR)
-        #print(colors)
+        most_popular_color = max(colors, key=colors.get)
+
 
         left_selected = Score.score(left_colors)
         left_selected_hex = [hex(color)[4::] for color in left_selected]
-        print(left_selected_hex)
+        #print(left_selected_hex)
 
 
         selected = Score.score(colors)
@@ -125,22 +126,22 @@ class MainWindow(QMainWindow):
         totaloccurance = 0
         for i in range(len(selected)):
             totaloccurance += colors[selected[i]]
-            print(colors[selected[i]])
+            #print(colors[selected[i]])
 
         colors_and_occurance = {}
         for i in range(len(selected)):
             colors_and_occurance[selected_in_hex[i]] = (colors[selected[i]] ) / totaloccurance
             #print((colors[selected[i]] * 100) / totaloccurance)
 
-        print(colors_and_occurance)
+        #print(colors_and_occurance)
         
 
 
         #bgcolor = "#" + hex(selected[0])[4::]
         #print(colors[selected[0]])
         #bgcolor = "#" + combine_hex_values(colors_and_occurance)
-        bgcolor = "#" + combine_hex_values(left_colors_and_occurance)
-        #bgcolor = "#" + left_selected_hex[0]
+        #bgcolor = "#" + combine_hex_values(left_colors_and_occurance)
+        bgcolor = "#" + hex(most_popular_color)[4::]
 
         #bgcolor = "#" + combine_hex_values(allcolors_and_occurance)
         self.setStyleSheet("background-color: "+ bgcolor + ";") 
@@ -203,7 +204,7 @@ class MainWindow(QMainWindow):
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
-        print(pixel_len)
+        #print(pixel_len)
 
 
 
