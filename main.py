@@ -65,7 +65,7 @@ class MainWindow(QMainWindow):
 
         left_pixels = []
         for i in range(1, len(pixel_array), image.width):
-            for j in range(int(image.width * 0.15)):
+            for j in range(int(image.width * 0.5)):
                 left_pixels.append(pixel_array[i+j])
 
             #print(i, pixel_array[i])
@@ -75,6 +75,11 @@ class MainWindow(QMainWindow):
         
         colors = QuantizeCelebi(pixel_array, MAX_COLOR)
         #print(colors)
+
+        left_selected = Score.score(left_colors)
+        left_selected_hex = [hex(color)[4::] for color in left_selected]
+        print(left_selected_hex)
+
 
         selected = Score.score(colors)
         #print(selected)
@@ -135,6 +140,7 @@ class MainWindow(QMainWindow):
         #print(colors[selected[0]])
         #bgcolor = "#" + combine_hex_values(colors_and_occurance)
         bgcolor = "#" + combine_hex_values(left_colors_and_occurance)
+        #bgcolor = "#" + left_selected_hex[0]
 
         #bgcolor = "#" + combine_hex_values(allcolors_and_occurance)
         self.setStyleSheet("background-color: "+ bgcolor + ";") 
