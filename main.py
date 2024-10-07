@@ -62,11 +62,20 @@ class MainWindow(QMainWindow):
         pixel_array = [image_data[_] for _ in range(0, pixel_len)]
         pixel_array = StbLoadImage(fname_E)
         
+
+        left_pixels = []
+        for i in range(1, len(pixel_array), image.width):
+            left_pixels.append(pixel_array[i])
+            #print(i, pixel_array[i])
+
+        left_colors = QuantizeCelebi(left_pixels, MAX_COLOR)
+        print(left_colors)
+        
         colors = QuantizeCelebi(pixel_array, MAX_COLOR)
-        print(colors)
+        #print(colors)
 
         selected = Score.score(colors)
-        print(selected)
+        #print(selected)
         
 
         allcolors_in_hex = [hex(color)[4::] for color in colors]
@@ -83,7 +92,23 @@ class MainWindow(QMainWindow):
             cnt += 1
             #print((colors[selected[i]] * 100) / totaloccurance)
 
-        print(allcolors_and_occurance)
+        #print(allcolors_and_occurance)
+
+
+        left_colors_in_hex = [hex(left_color)[4::] for left_color in left_colors]
+        
+        leftcolorstotaloccurance = 0
+        for left_color in left_colors:
+            leftcolorstotaloccurance += left_colors[left_color]
+            #print(colors[i])
+
+        left_colors_and_occurance = {}
+        cnt = 0
+        for left_color in left_colors:
+            left_colors_and_occurance[left_colors_in_hex[cnt]] = (left_colors[left_color] ) / leftcolorstotaloccurance
+            cnt += 1
+
+
 
 
 
@@ -106,7 +131,8 @@ class MainWindow(QMainWindow):
 
         #bgcolor = "#" + hex(selected[0])[4::]
         #print(colors[selected[0]])
-        bgcolor = "#" + combine_hex_values(colors_and_occurance)
+        #bgcolor = "#" + combine_hex_values(colors_and_occurance)
+        bgcolor = "#" + combine_hex_values(left_colors_and_occurance)
 
         #bgcolor = "#" + combine_hex_values(allcolors_and_occurance)
         self.setStyleSheet("background-color: "+ bgcolor + ";") 
