@@ -76,6 +76,13 @@ class MainWindow(QMainWindow):
         return most_popular_color_in_hex
 
 
+    def getAccentColorsFromImage(self, _pixel_array):
+        colors                              = QuantizeCelebi(_pixel_array, MAX_COLOR)
+        accent_colors                       = Score.score(colors)
+        selected_in_hex                     = [hex(color)[4::] for color in accent_colors]
+        return selected_in_hex
+
+
     def openFileDialog(self):
         fname_E, selFilter = QFileDialog.getOpenFileName()
         image = Image.open(fname_E)
@@ -89,8 +96,9 @@ class MainWindow(QMainWindow):
         most_popular_color = max(colors, key=colors.get)
 
 
-        print(self.getAccentColorsFromLeftSide(pixel_array, image.width, 0.5))
-        print(self.getMostCommonColorFromLeftSide(pixel_array, image.width, 0.01))
+        print("Left accents:", self.getAccentColorsFromLeftSide(pixel_array, image.width, 0.5))
+        print("Left most common color:", self.getMostCommonColorFromLeftSide(pixel_array, image.width, 0.01))
+        print("Full image accents:", self.getAccentColorsFromImage(pixel_array))
 
         selected = Score.score(colors)
         #print(selected)
