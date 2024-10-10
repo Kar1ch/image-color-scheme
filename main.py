@@ -52,35 +52,45 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(widget)
 
     
+    def getPixelsFromLeftSide(self, _pixel_array, _image_width, _percent_of_image):
+        pixels_of_left_side = []
+        for i in range(1, len(_pixel_array), _image_width):
+            for j in range(int(_image_width * _percent_of_image)):
+                pixels_of_left_side.append(_pixel_array[i+j])
+        return pixels_of_left_side
+
+
+    def getAccentColorsFromLeftSide(self, _pixel_array, _image_width, _percent_of_image):
+        pixels_of_left_side                 = self.getPixelsFromLeftSide(_pixel_array, _image_width, _percent_of_image)
+        colors_of_left_side                 = QuantizeCelebi(pixels_of_left_side, MAX_COLOR)
+        selected_colors_of_left_side        = Score.score(colors_of_left_side)
+        selected_colors_of_left_side_in_hex = [hex(color)[4::] for color in selected_colors_of_left_side]
+        return selected_colors_of_left_side_in_hex
+        
+    
+    def getMostCommonColorFromLeftSide(self, _pixel_array, _image_width, _percent_of_image):
+        pixels_of_left_side                 = self.getPixelsFromLeftSide(_pixel_array, _image_width, _percent_of_image)
+        colors_of_left_side                 = QuantizeCelebi(pixels_of_left_side, MAX_COLOR)
+        most_popular_color                  = max(colors_of_left_side, key=colors_of_left_side.get)
+        most_popular_color_in_hex           = hex(most_popular_color)[4::]
+        return most_popular_color_in_hex
+
+
     def openFileDialog(self):
         fname_E, selFilter = QFileDialog.getOpenFileName()
         image = Image.open(fname_E)
         pixel_len = image.width * image.height
 
-
         image_data = image.getdata()
         pixel_array = [image_data[_] for _ in range(0, pixel_len)]
         pixel_array = StbLoadImage(fname_E)
-        
-
-        left_pixels = []
-        for i in range(1, len(pixel_array), image.width):
-            for j in range(int(image.width * 0.5)):
-                left_pixels.append(pixel_array[i+j])
-
-            #print(i, pixel_array[i])
-
-        left_colors = QuantizeCelebi(left_pixels, MAX_COLOR)
-        #print(left_colors)
         
         colors = QuantizeCelebi(pixel_array, MAX_COLOR)
         most_popular_color = max(colors, key=colors.get)
 
 
-        left_selected = Score.score(left_colors)
-        left_selected_hex = [hex(color)[4::] for color in left_selected]
-        #print(left_selected_hex)
-
+        print(self.getAccentColorsFromLeftSide(pixel_array, image.width, 0.5))
+        print(self.getMostCommonColorFromLeftSide(pixel_array, image.width, 0.01))
 
         selected = Score.score(colors)
         #print(selected)
@@ -103,6 +113,8 @@ class MainWindow(QMainWindow):
         #print(allcolors_and_occurance)
 
 
+
+        '''
         left_colors_in_hex = [hex(left_color)[4::] for left_color in left_colors]
         
         leftcolorstotaloccurance = 0
@@ -115,7 +127,7 @@ class MainWindow(QMainWindow):
         for left_color in left_colors:
             left_colors_and_occurance[left_colors_in_hex[cnt]] = (left_colors[left_color] ) / leftcolorstotaloccurance
             cnt += 1
-
+        '''
 
 
 
