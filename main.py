@@ -60,34 +60,50 @@ class MainWindow(QMainWindow):
         return pixels_of_left_side
 
 
-    def getAccentColorsFromLeftSide(self, _pixel_array, _image_width, _percent_of_image):
+    def getAccentColorsFromLeftSide(self, _pixel_array, _image_width, _percent_of_image, _max_color):
         pixels_of_left_side                 = self.getPixelsFromLeftSide(_pixel_array, _image_width, _percent_of_image)
-        colors_of_left_side                 = QuantizeCelebi(pixels_of_left_side, MAX_COLOR)
+        colors_of_left_side                 = QuantizeCelebi(pixels_of_left_side, _max_color)
         selected_colors_of_left_side        = Score.score(colors_of_left_side)
         selected_colors_of_left_side_in_hex = [hex(color)[4::] for color in selected_colors_of_left_side]
         return selected_colors_of_left_side_in_hex
         
     
-    def getMostCommonColorFromLeftSide(self, _pixel_array, _image_width, _percent_of_image):
+    def getMostCommonColorFromLeftSide(self, _pixel_array, _image_width, _percent_of_image, _max_color):
         pixels_of_left_side                 = self.getPixelsFromLeftSide(_pixel_array, _image_width, _percent_of_image)
-        colors_of_left_side                 = QuantizeCelebi(pixels_of_left_side, MAX_COLOR)
+        colors_of_left_side                 = QuantizeCelebi(pixels_of_left_side, _max_color)
         most_popular_color                  = max(colors_of_left_side, key=colors_of_left_side.get)
         most_popular_color_in_hex           = hex(most_popular_color)[4::]
         return most_popular_color_in_hex
 
 
-    def getAccentColorsFromImage(self, _pixel_array):
-        colors                              = QuantizeCelebi(_pixel_array, MAX_COLOR)
+    def getAccentColorsFromImage(self, _pixel_array, _max_color):
+        colors                              = QuantizeCelebi(_pixel_array, _max_color)
         accent_colors                       = Score.score(colors)
         selected_in_hex                     = [hex(color)[4::] for color in accent_colors]
         return selected_in_hex
 
     
-    def getMostCommonColorFromImage(self, _pixel_array):
-        colors                              = QuantizeCelebi(_pixel_array, MAX_COLOR)
+    def getMostCommonColorFromImage(self, _pixel_array, _max_color):
+        colors                              = QuantizeCelebi(_pixel_array, _max_color)
         most_popular_color                  = max(colors, key=colors.get)
         most_popular_color_in_hex           = hex(most_popular_color)[4::]
         return most_popular_color_in_hex 
+
+    
+    def getMostCommonAccentColor(self, _pixel_array, _max_color):
+        colors                              = QuantizeCelebi(_pixel_array, _max_color)
+        accent_colors                       = Score.score(colors)
+        
+        most_popular_accent_color = 0
+        max_occurance = 0
+        for color in accent_colors:
+            if max_occurance < colors[color]:
+                max_occurance = colors[color]
+                most_popular_accent_color = color
+            print(color, colors[color])
+
+        most_popular_accent_color_in_hex = hex(most_popular_accent_color)[4::]
+        return most_popular_accent_color_in_hex
 
 
     def openFileDialog(self):
@@ -103,10 +119,12 @@ class MainWindow(QMainWindow):
         most_popular_color = max(colors, key=colors.get)
 
 
-        print("Left accents:", self.getAccentColorsFromLeftSide(pixel_array, image.width, 0.5))
-        print("Left most common color:", self.getMostCommonColorFromLeftSide(pixel_array, image.width, 0.01))
-        print("Full image accents:", self.getAccentColorsFromImage(pixel_array))
-
+        print("Left accents:", self.getAccentColorsFromLeftSide(pixel_array, image.width, 0.5, MAX_COLOR))
+        print("Left most common color:", self.getMostCommonColorFromLeftSide(pixel_array, image.width, 0.01, MAX_COLOR))
+        print("Full image accents:", self.getAccentColorsFromImage(pixel_array, MAX_COLOR))
+        print("Most common color:", self.getMostCommonColorFromImage(pixel_array, 32))
+        print(self.getMostCommonAccentColor(pixel_array, MAX_COLOR))
+        
 
 
 
@@ -175,7 +193,7 @@ class MainWindow(QMainWindow):
 
         #bgcolor = "#" + combine_hex_values(allcolors_and_occurance)
 
-        bgcolor = "#" + self.getMostCommonColorFromImage(pixel_array)
+        bgcolor = "#" + self.getMostCommonAccentColor(pixel_array, MAX_COLOR)
         self.setStyleSheet("background-color: "+ bgcolor + ";") 
 
         
