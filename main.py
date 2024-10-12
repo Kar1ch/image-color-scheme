@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
     def setupUi(self):
         self.setWindowTitle("ашалеть")
         self.setStyleSheet("background-color: black;") 
-        self.resize(800, 600)
+        self.resize(320, 400)
 
         layout = QVBoxLayout()
         button = QPushButton("Выбрать картинку")
@@ -53,7 +53,7 @@ class MainWindow(QMainWindow):
 
     
     def getPixelsFromLeftSide(self, _pixel_array, _image_width, _percent_of_image):
-        pixels_of_left_side = []
+        pixels_of_left_side                 = []
         for i in range(1, len(_pixel_array), _image_width):
             for j in range(int(_image_width * _percent_of_image)):
                 pixels_of_left_side.append(_pixel_array[i+j])
@@ -93,16 +93,14 @@ class MainWindow(QMainWindow):
     def getMostCommonAccentColor(self, _pixel_array, _max_color):
         colors                              = QuantizeCelebi(_pixel_array, _max_color)
         accent_colors                       = Score.score(colors)
-        
-        most_popular_accent_color = 0
-        max_occurance = 0
+        most_popular_accent_color           = 0
+        max_occurance                       = 0
         for color in accent_colors:
             if max_occurance < colors[color]:
-                max_occurance = colors[color]
-                most_popular_accent_color = color
+                max_occurance               = colors[color]
+                most_popular_accent_color   = color
             print(color, colors[color])
-
-        most_popular_accent_color_in_hex = hex(most_popular_accent_color)[4::]
+        most_popular_accent_color_in_hex    = hex(most_popular_accent_color)[4::]
         return most_popular_accent_color_in_hex
 
 
@@ -150,24 +148,6 @@ class MainWindow(QMainWindow):
 
 
 
-        '''
-        left_colors_in_hex = [hex(left_color)[4::] for left_color in left_colors]
-        
-        leftcolorstotaloccurance = 0
-        for left_color in left_colors:
-            leftcolorstotaloccurance += left_colors[left_color]
-            #print(colors[i])
-
-        left_colors_and_occurance = {}
-        cnt = 0
-        for left_color in left_colors:
-            left_colors_and_occurance[left_colors_in_hex[cnt]] = (left_colors[left_color] ) / leftcolorstotaloccurance
-            cnt += 1
-        '''
-
-
-
-
         selected_in_hex = [hex(color)[4::] for color in selected]
         
         
@@ -212,23 +192,6 @@ class MainWindow(QMainWindow):
             #layout.addWidget()
         #frame.pack(padx=0, pady=0)
         
-        '''
-        test = Scheme.light(selected[0])
-        schemecolors = []
-        cnt = 0
-        schemelabel = Label(frame, background="white", text="Scheme.light", width=10)
-        schemelabel.pack(padx=1, pady=1)
-        for key in test.props.keys():
-            color = selected[i]
-            #bgcolorlabel = "#" + hex(color)[4::]
-            schemecolors.append(Label(frame, background=rgba_to_hex(test.props[key])[:-2], width=10))
-            schemecolors[cnt].pack(padx=1, pady=1)
-            cnt += 1
-            myButton.configure(background=rgba_to_hex(test.props["primaryContainer"])[:-2])
-            button_quit.configure(background=rgba_to_hex(test.props["error"])[:-2])
-            print(rgba_to_hex(test.props[key]))
-
-        '''
 
 
 
@@ -268,82 +231,3 @@ if __name__ == "__main__":
 
 
 
-
-'''
-
-if __name__ == "__main__":
-    root = Tk()
-    root.geometry("800x600")
-    #root.configure(background="#ffffff")
-
-    button_quit = Button(root, text='Exit Program', command=root.quit, borderwidth=0)
-    button_quit.pack()
-
-    
-    my_label = Label(borderwidth = 0)
-    my_label.pack()
-
-
-    
-    def myClick():
-        link = askopenfilename()
-        imageTk = ImageTk.PhotoImage(Image.open(link))
-        image = Image.open(link)
-        pixel_len = image.width * image.height
-        image_data = image.getdata()
-        pixel_array = [image_data[_] for _ in range(0, pixel_len)]
-        pixel_array = StbLoadImage(link)
-        
-        colors = QuantizeCelebi(pixel_array, MAX_COLOR)
-        #print(colors)
-
-        selected = Score.score(colors)
-        print(selected)
-        
-        bgcolor = "#" + hex(selected[0])[4::]
-        root.configure(background = bgcolor)
-
-        
-        frame = Frame(root, background='white')
-        frame.pack_forget()
-        maincolors = []
-        for i in range(len(selected)):    
-            color = selected[i]
-            bgcolorlabel = "#" + hex(color)[4::]
-            maincolors.append(Label(frame, background=bgcolorlabel, width=10))
-            maincolors[i].pack(padx=1, pady=1)
-        frame.pack(padx=0, pady=0)
-        
-
-        test = Scheme.light(selected[0])
-        schemecolors = []
-        cnt = 0
-        schemelabel = Label(frame, background="white", text="Scheme.light", width=10)
-        schemelabel.pack(padx=1, pady=1)
-        for key in test.props.keys():
-            color = selected[i]
-            #bgcolorlabel = "#" + hex(color)[4::]
-            schemecolors.append(Label(frame, background=rgba_to_hex(test.props[key])[:-2], width=10))
-            schemecolors[cnt].pack(padx=1, pady=1)
-            cnt += 1
-            myButton.configure(background=rgba_to_hex(test.props["primaryContainer"])[:-2])
-            button_quit.configure(background=rgba_to_hex(test.props["error"])[:-2])
-            print(rgba_to_hex(test.props[key]))
-       
-
-        #print(test.props.keys())
-
-        #print(pixel_len)
-        #print(image_data)
-        my_label.configure(image=imageTk)
-        my_label.image = imageTk
-
-
-
-    myButton = Button(root, text='Scan Part Number', command=myClick,
-                  bg='#ffaaaa', fg='#ffffff', borderwidth=0)
-    myButton.pack()
-
-    root.mainloop()
-
-'''
