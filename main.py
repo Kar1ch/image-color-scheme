@@ -80,8 +80,8 @@ class MainWindow(QMainWindow):
         colors                              = QuantizeCelebi(_pixel_array, _max_color)
         accent_colors                       = Score.score(colors)
         selected_in_hex                     = [hex(color)[4::] for color in accent_colors]
-        return selected_in_hex
-
+        #return selected_in_hex
+        return accent_colors
     
     def getMostCommonColorFromImage(self, _pixel_array, _max_color):
         colors                              = QuantizeCelebi(_pixel_array, _max_color)
@@ -99,9 +99,16 @@ class MainWindow(QMainWindow):
             if max_occurance < colors[color]:
                 max_occurance               = colors[color]
                 most_popular_accent_color   = color
-            print(color, colors[color])
+            #print(color, colors[color])
         most_popular_accent_color_in_hex    = hex(most_popular_accent_color)[4::]
         return most_popular_accent_color_in_hex
+
+
+    def createColorScheme(self, _primary_color):
+        scheme = Scheme.dark(_primary_color)
+        scheme_colors = []
+        for key in scheme.props.keys():
+            print(key, scheme.props[key])
 
 
     def openFileDialog(self):
@@ -116,12 +123,15 @@ class MainWindow(QMainWindow):
         colors = QuantizeCelebi(pixel_array, MAX_COLOR)
         most_popular_color = max(colors, key=colors.get)
 
-
+        
         print("Left accents:", self.getAccentColorsFromLeftSide(pixel_array, image.width, 0.5, MAX_COLOR))
         print("Left most common color:", self.getMostCommonColorFromLeftSide(pixel_array, image.width, 0.01, MAX_COLOR))
-        print("Full image accents:", self.getAccentColorsFromImage(pixel_array, MAX_COLOR))
+        accent_colors =  self.getAccentColorsFromImage(pixel_array, MAX_COLOR)
+        print("Full image accents:", accent_colors)
         print("Most common color:", self.getMostCommonColorFromImage(pixel_array, 32))
         print(self.getMostCommonAccentColor(pixel_array, MAX_COLOR))
+
+        self.createColorScheme(accent_colors[0])
         
 
 
