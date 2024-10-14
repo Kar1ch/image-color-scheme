@@ -183,7 +183,7 @@ class MainWindow(QMainWindow):
 
         #bgcolor = "#" + combine_hex_values(allcolors_and_occurance)
 
-        bgcolor = "#" + self.getMostCommonAccentColor(pixel_array, MAX_COLOR)
+        bgcolor = "#" + self.getMostCommonColorFromImage(pixel_array, MAX_COLOR)
         self.setStyleSheet("background-color: "+ bgcolor + ";") 
 
         
