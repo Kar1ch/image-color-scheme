@@ -2,14 +2,12 @@ MAX_COLOR = 128
 
 import sys
 import os
-from tkinter import *
 from PyQt6 import QtCore
 from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton, QLabel, QVBoxLayout, QFileDialog
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtCore import *
 from PyQt6.QtGui import QPixmap
-from tkinter.filedialog import askopenfilename
 from materialyoucolor.utils.color_utils import rgba_from_argb
 from materialyoucolor.quantize import QuantizeCelebi, StbLoadImage
 from materialyoucolor.score.score import Score
