@@ -12,7 +12,7 @@ from materialyoucolor.utils.color_utils import rgba_from_argb
 from materialyoucolor.quantize import QuantizeCelebi, StbLoadImage
 from materialyoucolor.score.score import Score
 from materialyoucolor.scheme.scheme import Scheme
-from PIL import Image, ImageTk
+from PIL import Image
 
 rgba_to_hex = lambda rgba: "#{:02X}{:02X}{:02X}{:02X}".format(*map(round, rgba))
 
