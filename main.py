@@ -2,6 +2,7 @@ MAX_COLOR = 128
 
 import sys
 import os
+from pathlib import Path
 from PyQt6 import QtCore
 from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton, QLabel, QVBoxLayout, QFileDialog
 from PyQt6.QtWidgets import *
@@ -105,8 +106,34 @@ class MainWindow(QMainWindow):
     def createColorScheme(self, _primary_color):
         scheme = Scheme.dark(_primary_color)
         scheme_colors = []
-        for key in scheme.props.keys():
-            print(key, scheme.props[key])
+        #for key in scheme.props.keys():
+        #    print(key, scheme.props[key])
+        return(scheme.props)
+
+    def setHyprlandColor(self, _color_int):
+        home = Path.home()
+        
+        new_border_color = hex(_color_int)[4::]
+        print(new_border_color)
+
+        path = home / ".config/hypr/hyprland.conf" 
+        with open(path) as file:
+            lines = file.readlines()
+
+        # Изменяем нужную строку
+        for i, line in enumerate(lines):
+            if "col.active_border" in line:
+                # Разделяем строку на части
+                parts = line.split('=')
+                # Предполагаем, что нужно изменить последний элемент
+                if len(parts) > 1:
+                    parts[-1] = "rgba(" + new_border_color + "ff)"  # Меняем значение справа
+                    lines[i] = '= '.join(parts) + "\n" # Объединяем обратно в строку
+
+        # Записываем изменения обратно в файл
+        with open(path, 'w') as file:
+            file.writelines(lines)
+            #print(data)
 
 
     def openFileDialog(self):
@@ -131,9 +158,6 @@ class MainWindow(QMainWindow):
 
         self.createColorScheme(accent_colors[0])
         
-
-
-
         selected = Score.score(colors)
         #print(selected)
         
@@ -155,6 +179,7 @@ class MainWindow(QMainWindow):
         #print(allcolors_and_occurance)
 
 
+        self.setHyprlandColor(selected[0])
 
         selected_in_hex = [hex(color)[4::] for color in selected]
         
