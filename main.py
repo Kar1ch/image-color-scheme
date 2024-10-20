@@ -151,52 +151,9 @@ class MainWindow(QMainWindow):
         self.createColorScheme(accent_colors[0])
         
         selected = Score.score(colors)
-        #print(selected)
-        
 
-        allcolors_in_hex = [hex(color)[4::] for color in colors]
-        
-        allcolorstotaloccurance = 0
-        for color in colors:
-            allcolorstotaloccurance += colors[color]
-            #print(colors[i])
+        self.setHyprlandColor(accent_colors[0])
 
-        allcolors_and_occurance = {}
-        cnt = 0
-        for color in colors:
-            allcolors_and_occurance[allcolors_in_hex[cnt]] = (colors[color] ) / allcolorstotaloccurance
-            cnt += 1
-            #print((colors[selected[i]] * 100) / totaloccurance)
-
-        #print(allcolors_and_occurance)
-
-
-        self.setHyprlandColor(selected[0])
-
-        selected_in_hex = [hex(color)[4::] for color in selected]
-        
-        
-        totaloccurance = 0
-        for i in range(len(selected)):
-            totaloccurance += colors[selected[i]]
-            #print(colors[selected[i]])
-
-        colors_and_occurance = {}
-        for i in range(len(selected)):
-            colors_and_occurance[selected_in_hex[i]] = (colors[selected[i]] ) / totaloccurance
-            #print((colors[selected[i]] * 100) / totaloccurance)
-
-        #print(colors_and_occurance)
-        
-
-
-        #bgcolor = "#" + hex(selected[0])[4::]
-        #print(colors[selected[0]])
-        #bgcolor = "#" + combine_hex_values(colors_and_occurance)
-        #bgcolor = "#" + combine_hex_values(left_colors_and_occurance)
-        #bgcolor = "#" + hex(most_popular_color)[4::]
-
-        #bgcolor = "#" + combine_hex_values(allcolors_and_occurance)
 
         bgcolor = "#" + self.getMostCommonColorFromImage(pixel_array, MAX_COLOR)
         self.setStyleSheet("background-color: "+ bgcolor + ";") 
