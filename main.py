@@ -143,7 +143,7 @@ class MainWindow(QMainWindow):
         
         print("Left accents:", self.getAccentColorsFromLeftSide(pixel_array, image.width, 0.5, MAX_COLOR))
         print("Left most common color:", self.getMostCommonColorFromLeftSide(pixel_array, image.width, 0.01, MAX_COLOR))
-        accent_colors =  self.getAccentColorsFromImage(pixel_array, MAX_COLOR)
+        accent_colors =  self.getAccentColorsFromImage(pixel_array, 64)
         print("Full image accents:", accent_colors)
         print("Most common color:", self.getMostCommonColorFromImage(pixel_array, 32))
         print(self.getMostCommonAccentColor(pixel_array, MAX_COLOR))
@@ -152,7 +152,11 @@ class MainWindow(QMainWindow):
         
         selected = Score.score(colors)
 
-        self.setHyprlandColor(accent_colors[0])
+        for color in accent_colors:
+            color_in_hex = hex(color)[4::]
+            if (color_in_hex[0] != "f") and (color_in_hex[2] != "f") and (color_in_hex[4] != "f"):
+                self.setHyprlandColor(color)
+                break
 
 
         bgcolor = "#" + self.getMostCommonColorFromImage(pixel_array, MAX_COLOR)
