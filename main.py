@@ -108,15 +108,75 @@ class MainWindow(QMainWindow):
         scheme_colors = []
         #for key in scheme.props.keys():
         #    print(key, scheme.props[key])
-        return(scheme.props)
+        return(scheme)
+    
+
+    def setWaybarColors(self, _color_int):
+        home = Path.home()
+        path_to_waybar_style = home / ".config/waybar/style.css"
+
+        scheme = self.createColorScheme(_color_int)
+        print(scheme.props["primary"])
+
+        with open(path_to_waybar_style) as file:
+            lines = file.readlines()
+
+        is_button_color = False
+        is_button_background_color = False
+        is_active_button_color = False
+        is_active_button_background_color = False
+        for i, line in enumerate(lines):
+            if "#workspaces button{" in line or "#workspaces button " in line:
+                is_button_color = True
+                is_button_background_color = True
+
+            if "#workspaces button.active{" in line or "#workspaces button.active " in line:
+                is_active_button_color = True
+                is_active_button_background_color = True
 
 
-    def setHyprlandColor(self, _color_int):
+            if is_button_color and " color" in line:
+                parts = line.split(":")
+                if len(parts) > 1:
+                    parts[-1] = rgba_to_hex(scheme.props["primary"])[:-2] + ";"
+                    lines[i] = ": ".join(parts) + "\n"
+                is_button_color = False
+
+            if is_button_background_color and " background-color" in line:
+                parts = line.split(":")
+                if len(parts) > 1:
+                    parts[-1] = rgba_to_hex(scheme.props["background"])[:-2] + ";"
+                    lines[i] = ": ".join(parts) + "\n"
+                is_button_background_color = False 
+
+
+            if is_active_button_color and " color" in line:
+                parts = line.split(":")
+                if len(parts) > 1:
+                    parts[-1] = rgba_to_hex(scheme.props["onPrimary"])[:-2] + ";"
+                    lines[i] = ": ".join(parts) + "\n"
+                is_active_button_color = False
+
+            if is_active_button_background_color and " background-color" in line:
+                parts = line.split(":")
+                if len(parts) > 1:
+                    parts[-1] = rgba_to_hex(scheme.props["primary"])[:-2] + ";"
+                    lines[i] = ": ".join(parts) + "\n"
+                is_active_button_background_color = False 
+
+
+
+        with open(path_to_waybar_style, "w") as file:
+            file.writelines(lines)
+        
+
+
+    def setHyprlandColors(self, _color_int):
         home = Path.home()
         new_border_color = hex(_color_int)[4::]
         print(new_border_color)
-        path = home / ".config/hypr/hyprland.conf" 
-        with open(path) as file:
+        path_to_hyprland = home / ".config/hypr/hyprland.conf" 
+        with open(path_to_hyprland) as file:
             lines = file.readlines()
         for i, line in enumerate(lines):
             if "col.active_border" in line:
@@ -124,7 +184,7 @@ class MainWindow(QMainWindow):
                 if len(parts) > 1:
                     parts[-1] = "rgba(" + new_border_color + "ff)"
                     lines[i] = '= '.join(parts) + "\n" 
-        with open(path, 'w') as file:
+        with open(path_to_hyprland, 'w') as file:
             file.writelines(lines)
 
 
@@ -155,7 +215,8 @@ class MainWindow(QMainWindow):
         for color in accent_colors:
             color_in_hex = hex(color)[4::]
             if (color_in_hex[0] != "f") and (color_in_hex[2] != "f") and (color_in_hex[4] != "f"):
-                self.setHyprlandColor(color)
+                self.setWaybarColors(color)
+                self.setHyprlandColors(color)
                 break
 
 
