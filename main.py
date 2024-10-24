@@ -125,6 +125,8 @@ class MainWindow(QMainWindow):
         is_button_background_color = False
         is_active_button_color = False
         is_active_button_background_color = False
+        is_clock_color = False
+        is_clock_background_color = False
         for i, line in enumerate(lines):
             if "#workspaces button{" in line or "#workspaces button " in line:
                 is_button_color = True
@@ -133,6 +135,10 @@ class MainWindow(QMainWindow):
             if "#workspaces button.active{" in line or "#workspaces button.active " in line:
                 is_active_button_color = True
                 is_active_button_background_color = True
+            
+            if "#clock" in line:
+                is_clock_color = True
+                is_clock_background_color = True
 
 
             if is_button_color and " color" in line:
@@ -164,6 +170,20 @@ class MainWindow(QMainWindow):
                     lines[i] = ": ".join(parts) + "\n"
                 is_active_button_background_color = False 
 
+
+            if is_clock_color and " color" in line:
+                parts = line.split(":")
+                if len(parts) > 1:
+                    parts[-1] = rgba_to_hex(scheme.props["primary"])[:-2] + ";"
+                    lines[i] = ": ".join(parts) + "\n"
+                is_clock_color = False
+
+            if is_clock_background_color and " background-color" in line:
+                parts = line.split(":")
+                if len(parts) > 1:
+                    parts[-1] = rgba_to_hex(scheme.props["background"])[:-2] + ";"
+                    lines[i] = ": ".join(parts) + "\n"
+                is_clock_background_color = False 
 
 
         with open(path_to_waybar_style, "w") as file:
