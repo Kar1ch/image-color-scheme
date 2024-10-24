@@ -193,8 +193,9 @@ class MainWindow(QMainWindow):
 
     def setHyprlandColors(self, _color_int):
         home = Path.home()
-        new_border_color = hex(_color_int)[4::]
-        print(new_border_color)
+        scheme = self.createColorScheme(_color_int)
+        new_border_color = (rgba_to_hex(scheme.props["primary"])[:-2])[1:]
+        print("border", new_border_color)
         path_to_hyprland = home / ".config/hypr/hyprland.conf" 
         with open(path_to_hyprland) as file:
             lines = file.readlines()
