@@ -14,6 +14,7 @@ from materialyoucolor.quantize import QuantizeCelebi, StbLoadImage
 from materialyoucolor.score.score import Score
 from materialyoucolor.scheme.scheme import Scheme
 from PIL import Image
+import subprocess
 
 rgba_to_hex = lambda rgba: "#{:02X}{:02X}{:02X}{:02X}".format(*map(round, rgba))
 
@@ -188,6 +189,9 @@ class MainWindow(QMainWindow):
 
         with open(path_to_waybar_style, "w") as file:
             file.writelines(lines)
+
+
+        subprocess.run(['bash', 'waybar_restart.sh'])
         
 
 
