@@ -10,7 +10,7 @@ from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtCore import *
 from PyQt6.QtGui import QPixmap
 from materialyoucolor.utils.color_utils import rgba_from_argb
-from materialyoucolor.quantize import QuantizeCelebi, StbLoadImage
+from materialyoucolor.quantize import QuantizeCelebi
 from materialyoucolor.score.score import Score
 from materialyoucolor.scheme.scheme import Scheme
 from PIL import Image
@@ -220,7 +220,6 @@ class MainWindow(QMainWindow):
 
         image_data = image.getdata()
         pixel_array = [image_data[_] for _ in range(0, pixel_len)]
-        pixel_array = StbLoadImage(fname_E)
         
         colors = QuantizeCelebi(pixel_array, MAX_COLOR)
         most_popular_color = max(colors, key=colors.get)
