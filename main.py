@@ -239,7 +239,7 @@ class MainWindow(QMainWindow):
         for color in accent_colors:
             color_in_hex = hex(color)[4::]
             if (color_in_hex[0] != "f") and (color_in_hex[2] != "f") and (color_in_hex[4] != "f"):
-                self.setWaybarColors(color)
+                #self.setWaybarColors(color)
                 self.setHyprlandColors(color)
                 break
 
